@@ -46,6 +46,17 @@ jobs:
       - name: Build and run tests
         run: mvn clean test
 
+      - name: Create Allure executor.json for GitHub Actions
+        run: |
+          mkdir -p target/allure-results
+          echo '{
+            "name": "GitHub Actions",
+            "type": "github",
+            "url": "https://github.com/MaciejJanowski121/ecommerce/actions",
+            "buildName": "PoC Test",
+            "buildOrder": 1,
+            "buildUrl": "https://github.com/MaciejJanowski121/ecommerce/actions"
+          }' > target/allure-results/executor.json
 
       - name: Generate Allure Report via Maven Plugin
         run: mvn io.qameta.allure:allure-maven:report
