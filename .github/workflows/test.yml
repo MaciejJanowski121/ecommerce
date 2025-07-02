@@ -48,11 +48,7 @@ jobs:
           cd ..
           sleep 20
 
-      - name: Show failed test log (Surefire Report)
-        if: failure()
-        run: |
-         echo "🧪 Inhalt der Surefire-Reports:"
-         cat target/surefire-reports/*.txt || echo "⚠️ Keine Reports gefunden"
+  
 
       - name: Show React frontend logs
         run: cat frontend/react.log || true
@@ -75,6 +71,12 @@ jobs:
 
       - name: Run tests and generate JaCoCo Report
         run: mvn test
+
+      - name: Show failed test log (Surefire Report)
+        if: failure()
+        run: |
+                 echo "🧪 Inhalt der Surefire-Reports:"
+                 cat target/surefire-reports/*.txt || echo "⚠️ Keine Reports gefunden"
 
       - name: Generate Allure Report
         run: |
