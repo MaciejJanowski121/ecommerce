@@ -86,6 +86,11 @@ jobs:
       - name: Run tests and generate JaCoCo + Allure Reports
         run: mvn clean test verify
 
+
+      - name: Show Spring Boot logs
+        if: always()
+        run: cat spring.log || true
+
       - name: Run API tests with Postman (Newman)
         run: |
               npm install -g newman
