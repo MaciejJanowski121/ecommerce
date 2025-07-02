@@ -57,18 +57,18 @@ jobs:
 
       - name: Install and run React frontend
         run: |
-          cd frontend
-          npm install
-          nohup npm run dev -- --host 0.0.0.0 --port 3000 > react.log 2>&1 &
-          cd ..
+         cd frontend
+         npm install
+         nohup npm run start > ../react.log 2>&1 &
+         cd ..
 
       - name: Wait for frontend to be available
         run: |
-          for i in {1..30}; do
-            curl --silent http://127.0.0.1:3000 && break
-            echo "Waiting for frontend..."
-            sleep 2
-          done
+         for i in {1..30}; do
+         curl --silent http://127.0.0.1:3000 && break
+         echo "Waiting for frontend..."
+         sleep 2
+         done
 
       - name: Show React frontend logs
         run: cat frontend/react.log || true
