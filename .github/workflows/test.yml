@@ -73,6 +73,15 @@ jobs:
         run: |
           nohup java -jar target/*.jar > spring.log 2>&1 &
           sleep 20
+          
+
+      - name: Wait for Spring Boot to be available
+        run: |
+         for i in {1..30}; do
+         curl --silent http://127.0.0.1:8080/actuator/health && break
+         echo "⏳ Waiting for Spring Boot..."
+          sleep 2
+         done
 
       - name: Run tests and generate JaCoCo + Allure Reports
         run: mvn clean test verify
