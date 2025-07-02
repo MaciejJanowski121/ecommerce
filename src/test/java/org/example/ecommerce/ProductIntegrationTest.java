@@ -46,3 +46,5 @@ public class ProductIntegrationTest {
         assertThat(allProducts.get(0).getName()).isEqualTo("Testprodukt");
     }
 }
+
+//Proof
