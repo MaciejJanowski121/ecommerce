@@ -58,8 +58,8 @@ jobs:
             "buildUrl": "https://github.com/MaciejJanowski121/ecommerce/actions"
           }' > target/allure-results/executor.json
 
-      - name: Generate Allure Report via Maven Plugin
-        run: mvn io.qameta.allure:allure-maven:report
+      - name: Generate Allure Report via Maven Plugin (with results path)
+        run: mvn io.qameta.allure:allure-maven:report -Dallure.results.directory=target/allure-results
 
       - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
