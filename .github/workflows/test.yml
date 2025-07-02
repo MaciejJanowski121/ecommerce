@@ -25,9 +25,6 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
-    env:
-      DISPLAY: ":99"  # dla Firefox w trybie headless
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -43,23 +40,11 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Firefox, GeckoDriver, jq, xvfb
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y firefox xvfb jq
-          export FIREFOX_BIN=$(which firefox)
-          GECKO_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq -r '.tag_name')
-          wget "https://github.com/mozilla/geckodriver/releases/download/${GECKO_VERSION}/geckodriver-${GECKO_VERSION}-linux64.tar.gz"
-          tar -xzf "geckodriver-${GECKO_VERSION}-linux64.tar.gz"
-          chmod +x geckodriver
-          sudo mv geckodriver /usr/local/bin/
-          Xvfb :99 -screen 0 1920x1080x24 &
-
-      - name: Install and run React frontend
+      - name: Install dependencies and start React frontend
         run: |
           cd frontend
           npm install
-          nohup npm run start > ../react.log 2>&1 &
+          nohup npm run start > react.log 2>&1 &
           cd ..
 
       - name: Wait for frontend to be available
@@ -71,10 +56,7 @@ jobs:
           done
 
       - name: Show React frontend logs
-        run: cat frontend/react.log || true
-
-      - name: Check which ports are listening
-        run: lsof -i -P -n | grep LISTEN || echo "⚠️ Kein Dienst aktiv"
+        run: cat react.log || true
 
       - name: Cache Maven packages
         uses: actions/cache@v4
