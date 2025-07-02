@@ -78,7 +78,7 @@ jobs:
       - name: Wait for Spring Boot to be available
         run: |
          for i in {1..30}; do
-         curl --silent http://127.0.0.1:8080/actuator/health && break
+         curl --silent http://127.0.0.1:8080/products && break
          echo "⏳ Waiting for Spring Boot..."
           sleep 2
          done
