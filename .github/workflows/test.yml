@@ -94,13 +94,13 @@ jobs:
         if: always()
         run: cat spring.log || true
 
-      - name: Run API tests with Postman (Newman)
+      - name: Run API tests with Postman (Newman + Allure reporter)
         run: |
-          npm install -g newman
-          newman run "postman/Ecommerce API Test.postman_collection.json" \
-            --reporters cli,junit \
-            --reporter-junit-export target/newman-report.xml \
-            --reporter-allure-export target/allure-results
+         npm install -g newman newman-reporter-allure
+         newman run "postman/Ecommerce API Test.postman_collection.json" \
+         --reporters cli,allure \
+         --reporter-allure-export target/allure-results \
+         --reporter-junit-export target/newman-report.xml
           
 
       - name: Generate Allure Report via Maven
