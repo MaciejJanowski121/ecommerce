@@ -6,8 +6,8 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Step;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -17,13 +17,15 @@ public class ProductFormTest {
 
     @BeforeEach
     void setUp() {
-        WebDriverManager.firefoxdriver().setup(); // automatyczne pobieranie GeckoDriver
+        WebDriverManager.chromedriver().setup(); // użyj ChromeDrivera
 
-        FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless");
-        driver = new FirefoxDriver(options);
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless=new");
+        options.addArguments("--no-sandbox");
+        options.addArguments("--disable-dev-shm-usage");
 
-        driver.get("http://127.0.0.1:3000"); // ważne: używamy 127.0.0.1, nie localhost
+        driver = new ChromeDriver(options);
+        driver.get("http://127.0.0.1:3000");
     }
 
     @Test
@@ -66,5 +68,7 @@ public class ProductFormTest {
         }
     }
 }
+
+//Proof
 
 //Proof
