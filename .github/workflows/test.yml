@@ -79,7 +79,7 @@ jobs:
          echo "🕒 Waiting for Spring Boot on port 8080..."
          for i in {1..30}; do
          nc -z localhost 8080 && echo "✅ Spring Boot is UP!" && break
-        echo "⏳ $i: Still waiting..."
+         echo "⏳ $i: Still waiting..."
          sleep 3
          done
 
