@@ -52,6 +52,8 @@ jobs:
 
       - name: Show React frontend logs
         run: cat frontend/react.log || true
+      - name: Check which ports are listening
+        run: lsof -i -P -n | grep LISTEN || echo "⚠️ Kein Dienst aktiv"
 
       - name: Cache Maven packages
         uses: actions/cache@v4
