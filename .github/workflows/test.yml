@@ -46,8 +46,6 @@ jobs:
       - name: Build and run tests
         run: mvn clean test
 
-      - name: Debug: Check if allure-results exists
-        run: ls -la target/allure-results || echo "allure-results not found"
 
       - name: Generate Allure Report via Maven Plugin
         run: mvn io.qameta.allure:allure-maven:report
