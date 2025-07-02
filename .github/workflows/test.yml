@@ -94,18 +94,18 @@ jobs:
         if: always()
         run: cat spring.log || true
 
-      - name: Run API tests with Postman (Newman + Allure + JUnit)
+      - name: Run API tests with Postman (Newman)
         run: |
-          npm install -g newman newman-reporter-allure newman-reporter-junit
-          mkdir -p target/allure-results
+          npm install -g newman
           newman run "postman/Ecommerce API Test.postman_collection.json" \
-          --reporters cli,allure,junit \
-          --reporter-allure-export target/allure-results \
-          --reporter-junit-export target/newman-report.xml
+            --reporters cli,junit \
+            --reporter-junit-export target/newman-report.xml \
+            --reporter-allure-export target/allure-results
           
 
       - name: Generate Allure Report via Maven
-        run: mvn allure:report
+        run: |
+         allure generate target/allure-results-combined --clean -o target/site/allure-maven-plugin
 
       - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4

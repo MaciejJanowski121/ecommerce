@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "test:newman": "newman run \"postman/Ecommerce API Test.postman_collection.json\" --reporters cli,allure --reporter-allure-export target/newman-allure-results"
+  },
+  "devDependencies": {
+    "newman-reporter-allure": "^3.3.0"
+  }
+}
