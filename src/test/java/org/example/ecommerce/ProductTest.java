@@ -38,3 +38,5 @@ public class ProductTest {
         verify(repository, times(1)).findAll();
     }
 }
+
+//Proof
