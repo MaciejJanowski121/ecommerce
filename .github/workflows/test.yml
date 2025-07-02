@@ -99,7 +99,8 @@ jobs:
           npm install -g newman
           newman run "postman/Ecommerce API Test.postman_collection.json" \
             --reporters cli,junit \
-            --reporter-junit-export target/newman-report.xml
+            --reporter-junit-export target/newman-report.xml \
+            --reporter-allure-export target/allure-results
           
 
       - name: Generate Allure Report via Maven
