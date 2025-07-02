@@ -77,6 +77,13 @@ jobs:
       - name: Run tests and generate JaCoCo + Allure Reports
         run: mvn clean test verify
 
+      - name: Run API tests with Postman (Newman)
+        run: |
+              npm install -g newman
+              newman run "postman/Ecommerce API Test.postman_collection.json" \
+                --reporters cli,junit \
+                --reporter-junit-export target/newman-report.xml
+
       - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -88,3 +95,9 @@ jobs:
         with:
          name: jacoco-report
          path: target/site/jacoco/
+
+      - name: Upload Postman (Newman) Test Report
+        uses: actions/upload-artifact@v4
+        with:
+           name: newman-report
+           path: target/newman-report.xml
