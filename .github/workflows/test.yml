@@ -25,6 +25,9 @@ jobs:
           --health-timeout=5s
           --health-retries=5
 
+    env:
+      DISPLAY: ":99"  # dla Firefox w trybie headless
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -40,18 +43,36 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install Firefox and GeckoDriver
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y firefox xvfb
+          export FIREFOX_BIN=$(which firefox)
+          GECKO_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep 'tag_name' | cut -d\" -f4)
+          wget "https://github.com/mozilla/geckodriver/releases/download/$GECKO_VERSION/geckodriver-$GECKO_VERSION-linux64.tar.gz"
+          tar -xzf "geckodriver-$GECKO_VERSION-linux64.tar.gz"
+          chmod +x geckodriver
+          sudo mv geckodriver /usr/local/bin/
+          Xvfb :99 -screen 0 1920x1080x24 &
+
       - name: Install and run React frontend
         run: |
           cd frontend
           npm install
           nohup npm run dev -- --host 0.0.0.0 --port 3000 > react.log 2>&1 &
           cd ..
-          sleep 20
 
-  
+      - name: Wait for frontend to be available
+        run: |
+          for i in {1..30}; do
+            curl --silent http://127.0.0.1:3000 && break
+            echo "Waiting for frontend..."
+            sleep 2
+          done
 
       - name: Show React frontend logs
         run: cat frontend/react.log || true
+
       - name: Check which ports are listening
         run: lsof -i -P -n | grep LISTEN || echo "⚠️ Kein Dienst aktiv"
 
@@ -77,8 +98,8 @@ jobs:
       - name: Show failed test log (Surefire Report)
         if: failure()
         run: |
-                 echo "🧪 Inhalt der Surefire-Reports:"
-                 cat target/surefire-reports/*.txt || echo "⚠️ Keine Reports gefunden"
+          echo "🧪 Inhalt der Surefire-Reports:"
+          cat target/surefire-reports/*.txt || echo "⚠️ Keine Reports gefunden"
 
       - name: Generate Allure Report
         run: |
