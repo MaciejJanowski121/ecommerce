@@ -104,8 +104,7 @@ jobs:
           
 
       - name: Generate Allure Report via Maven
-        run: |
-         allure generate target/allure-results-combined --clean -o target/site/allure-maven-plugin
+        run: mvn allure:report
 
       - name: Upload Allure Report Artifact
         uses: actions/upload-artifact@v4
