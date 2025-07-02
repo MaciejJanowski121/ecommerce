@@ -42,3 +42,5 @@ class ProductServiceTest {
         assertEquals(19.99, product.getPrice());
     }
 }
+
+//Proof
