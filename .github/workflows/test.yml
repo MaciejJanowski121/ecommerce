@@ -43,32 +43,32 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install Firefox and GeckoDriver
+      - name: Install Firefox, GeckoDriver, jq, xvfb
         run: |
           sudo apt-get update
-          sudo apt-get install -y firefox xvfb
+          sudo apt-get install -y firefox xvfb jq
           export FIREFOX_BIN=$(which firefox)
-          GECKO_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | grep 'tag_name' | cut -d\" -f4)
-          wget "https://github.com/mozilla/geckodriver/releases/download/$GECKO_VERSION/geckodriver-$GECKO_VERSION-linux64.tar.gz"
-          tar -xzf "geckodriver-$GECKO_VERSION-linux64.tar.gz"
+          GECKO_VERSION=$(curl -s https://api.github.com/repos/mozilla/geckodriver/releases/latest | jq -r '.tag_name')
+          wget "https://github.com/mozilla/geckodriver/releases/download/${GECKO_VERSION}/geckodriver-${GECKO_VERSION}-linux64.tar.gz"
+          tar -xzf "geckodriver-${GECKO_VERSION}-linux64.tar.gz"
           chmod +x geckodriver
           sudo mv geckodriver /usr/local/bin/
           Xvfb :99 -screen 0 1920x1080x24 &
 
       - name: Install and run React frontend
         run: |
-         cd frontend
-         npm install
-         nohup npm run start > ../react.log 2>&1 &
-         cd ..
+          cd frontend
+          npm install
+          nohup npm run start > ../react.log 2>&1 &
+          cd ..
 
       - name: Wait for frontend to be available
         run: |
-         for i in {1..30}; do
-         curl --silent http://127.0.0.1:3000 && break
-         echo "Waiting for frontend..."
-         sleep 2
-         done
+          for i in {1..30}; do
+            curl --silent http://127.0.0.1:3000 && break
+            echo "Waiting for frontend..."
+            sleep 2
+          done
 
       - name: Show React frontend logs
         run: cat frontend/react.log || true
