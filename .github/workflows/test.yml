@@ -42,14 +42,17 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-            
+
+      - name: Build Spring Boot app (skip tests)
+        run: mvn clean package -DskipTests
+
       - name: Start Spring Boot in background
         run: |
-         nohup mvn spring-boot:run > spring.log 2>&1 &
-         sleep 20
+          nohup java -jar target/*.jar > spring.log 2>&1 &
+          sleep 20
 
-      - name: Build and run tests and generate JaCoCo Report
-        run: mvn clean verify
+      - name: Run tests and generate JaCoCo Report
+        run: mvn test
 
       - name: Generate Allure Report
         run: |
