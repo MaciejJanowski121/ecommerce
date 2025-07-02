@@ -25,7 +25,7 @@ public class ProductFormTest {
         driver = new ChromeDriver(options);
         driver.get("http://localhost:3000");
     }
-    @Disabled("Wyłączony w GitHub Actions – brak działającego frontendu")
+
     @Test
     @Description("Testet das Hinzufügen eines Produkts über das React-Formular mit UI-Verifikation")
     void testAddProduct() {
