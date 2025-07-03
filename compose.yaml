@@ -22,8 +22,18 @@ services:
       POSTGRES_USER: myuser
       POSTGRES_PASSWORD: secret
     ports:
-      - "5432:5432"
+      - "5433:5432"
 
+
+  frontend:
+    image: ecommerce-frontend
+    build:
+      context: ./frontend
+      dockerfile: DockerFileFrontend
+    ports:
+      - "3000:80"  # port hosta:port w kontenerze
+    depends_on:
+      - backend
   prometheus:
     image: prom/prometheus:v2.44.0
     ports:
